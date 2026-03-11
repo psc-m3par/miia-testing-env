@@ -41,10 +41,9 @@ export default function FeedbackPage() {
       <Header userName={userName} />
       <main className="max-w-xl mx-auto px-4 py-10">
         <div className="bg-white rounded-2xl border border-gray-200 p-8 space-y-6">
-          <div className="text-center">
-            <div className="text-4xl mb-3">🎉</div>
-            <h1 className="text-2xl font-bold text-gray-900">Como foi sua experiência?</h1>
-            <p className="text-gray-500 mt-1">Seu feedback é essencial para melhorarmos nosso produto</p>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Feedback</h1>
+            <p className="text-gray-500 mt-1">Sugestões de melhoria</p>
           </div>
           <FeedbackForm onSubmit={handleSubmit} onSkip={handleSkip} loading={loading} />
         </div>
