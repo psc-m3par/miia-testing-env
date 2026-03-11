@@ -1,0 +1,11 @@
+{
+  "criteria": [
+    {
+      "id": "enem",
+      "name": "ENEM",
+      "description": "Exame Nacional do Ensino Médio",
+      "years": ["2024", "2023", "2022", "2021", "2020"],
+      "active": true
+    }
+  ]
+}

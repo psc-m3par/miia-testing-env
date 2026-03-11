@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "id": "user_001",
+      "name": "Cliente Demo",
+      "email": "demo@miia.tech",
+      "accessCode": "MIIA-2026-DEMO-001",
+      "totalCredits": 5,
+      "usedCredits": 0,
+      "tests": [],
+      "createdAt": "2026-03-01T00:00:00Z"
+    },
+    {
+      "id": "user_002",
+      "name": "Testador Alpha",
+      "email": "alpha@miia.tech",
+      "accessCode": "MIIA-2026-TEST-002",
+      "totalCredits": 5,
+      "usedCredits": 2,
+      "tests": [
+        {
+          "testId": "test_seed_001",
+          "criteria": "ENEM",
+          "year": "2023",
+          "status": "completed",
+          "startedAt": "2026-03-10T10:00:00Z",
+          "completedAt": "2026-03-10T10:15:00Z",
+          "feedbackSubmitted": true
+        },
+        {
+          "testId": "test_seed_002",
+          "criteria": "ENEM",
+          "year": "2022",
+          "status": "completed",
+          "startedAt": "2026-03-10T14:00:00Z",
+          "completedAt": "2026-03-10T14:20:00Z",
+          "feedbackSubmitted": false
+        }
+      ],
+      "createdAt": "2026-03-01T00:00:00Z"
+    }
+  ]
+}
