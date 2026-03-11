@@ -13,6 +13,8 @@ export default function Header({ userName, subtitle }: HeaderProps) {
   function handleLogout() {
     localStorage.removeItem('miia_userId');
     localStorage.removeItem('miia_userName');
+    localStorage.removeItem('miia_totalCredits');
+    localStorage.removeItem('miia_tests');
     router.push('/');
   }
 

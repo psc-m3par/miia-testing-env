@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import SubmissionPhase from '@/components/test/SubmissionPhase';
 import ProcessingPhase from '@/components/test/ProcessingPhase';
 import ResultPhase from '@/components/test/ResultPhase';
+import { getLocalTest } from '@/lib/localStore';
 
 type Phase = 1 | 2 | 3;
 
@@ -34,19 +35,16 @@ export default function TestPage() {
 
     if (!userId) { router.push('/'); return; }
 
-    fetch(`/api/test/${testId}?userId=${userId}`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.testId) {
-          setCriteriaName(data.criteria ?? '');
-          setYear(data.year ?? '');
-          setTestDate(data.startedAt ?? new Date().toISOString());
-        } else {
-          router.push('/dashboard');
-        }
-      })
-      .catch(() => router.push('/dashboard'))
-      .finally(() => setLoading(false));
+    const record = getLocalTest(testId);
+    if (record) {
+      setCriteriaName(record.criteria ?? '');
+      setYear(record.year ?? '');
+      setTestDate(record.startedAt ?? new Date().toISOString());
+    } else {
+      router.push('/dashboard');
+      return;
+    }
+    setLoading(false);
   }, [testId, router]);
 
   function handleSubmit(mode: 'text' | 'image', text: string, imageUrl: string | null) {

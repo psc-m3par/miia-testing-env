@@ -21,8 +21,14 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (data.success) {
+        // If switching users, clear previous test data
+        const prevId = localStorage.getItem('miia_userId');
+        if (prevId && prevId !== data.userId) {
+          localStorage.removeItem('miia_tests');
+        }
         localStorage.setItem('miia_userId', data.userId);
         localStorage.setItem('miia_userName', data.name);
+        localStorage.setItem('miia_totalCredits', String(data.totalCredits ?? 5));
         router.push('/dashboard');
       } else {
         setError('Código de acesso inválido. Verifique e tente novamente.');

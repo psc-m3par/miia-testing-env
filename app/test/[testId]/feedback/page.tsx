@@ -4,6 +4,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Header from '@/components/Header';
 import FeedbackForm from '@/components/FeedbackForm';
 import { useState } from 'react';
+import { updateLocalTest } from '@/lib/localStore';
 
 export default function FeedbackPage() {
   const [loading, setLoading] = useState(false);
@@ -18,11 +19,13 @@ export default function FeedbackPage() {
     if (!userId) { router.push('/'); return; }
     setLoading(true);
     try {
+      updateLocalTest(testId, { feedbackSubmitted: true });
+      // Send to API (best-effort, won't persist on serverless but logs the intent)
       await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, testId, textFeedback, fields: {} }),
-      });
+      }).catch(() => {});
       router.push('/dashboard');
     } finally {
       setLoading(false);

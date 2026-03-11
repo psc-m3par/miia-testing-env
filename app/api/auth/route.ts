@@ -10,5 +10,5 @@ export async function POST(req: NextRequest) {
   const user = getUserByCode(accessCode);
   if (!user) return NextResponse.json({ success: false, error: 'Código inválido' }, { status: 401 });
 
-  return NextResponse.json({ success: true, userId: user.id, name: user.name });
+  return NextResponse.json({ success: true, userId: user.id, name: user.name, totalCredits: user.totalCredits });
 }

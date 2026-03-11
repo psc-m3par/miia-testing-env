@@ -6,6 +6,7 @@ import CriterionCard from './CriterionCard';
 import EssayViewer from './EssayViewer';
 import ContextReferences from './ContextReferences';
 import themesData from '@/data/themes.json';
+import { updateLocalTest } from '@/lib/localStore';
 
 interface ThemeEntry {
   criteria: string;
@@ -60,14 +61,10 @@ export default function ResultPhase({
 
   async function handleComplete(dest: 'feedback' | 'dashboard') {
     setCompleting(true);
-    const userId = typeof window !== 'undefined' ? localStorage.getItem('miia_userId') : null;
-    if (userId) {
-      await fetch('/api/test/complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ testId, userId }),
-      }).catch(() => {});
-    }
+    updateLocalTest(testId, {
+      status: 'completed',
+      completedAt: new Date().toISOString(),
+    });
     if (dest === 'feedback') onComplete();
     else onBackToDashboard();
   }

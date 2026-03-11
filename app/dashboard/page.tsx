@@ -5,52 +5,51 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import CreditDisplay from '@/components/CreditDisplay';
 import TestHistory from '@/components/TestHistory';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import { User } from '@/lib/types';
+import { getLocalTests, getTotalCredits } from '@/lib/localStore';
+import { TestRecord } from '@/lib/types';
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState('');
+  const [totalCredits, setTotalCredits] = useState(0);
+  const [tests, setTests] = useState<TestRecord[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const userId = localStorage.getItem('miia_userId');
     if (!userId) { router.push('/'); return; }
-
-    fetch(`/api/user?userId=${userId}`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.id) setUser(data);
-        else router.push('/');
-      })
-      .finally(() => setLoading(false));
+    setUserName(localStorage.getItem('miia_userName') ?? '');
+    setTotalCredits(getTotalCredits());
+    setTests(getLocalTests());
+    setLoaded(true);
   }, [router]);
 
-  const remaining = user ? user.totalCredits - user.usedCredits : 0;
+  const usedCredits = tests.length;
+  const remaining = totalCredits - usedCredits;
 
-  if (loading) return <><Header /><LoadingSpinner /></>;
+  if (!loaded) return null;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header userName={user?.name} />
+      <Header userName={userName} />
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">Meu Painel</h1>
           <button
             onClick={() => router.push('/test/setup')}
-            disabled={remaining === 0}
-            title={remaining === 0 ? 'Seus créditos de teste acabaram' : undefined}
+            disabled={remaining <= 0}
+            title={remaining <= 0 ? 'Seus créditos de teste acabaram' : undefined}
             className="px-6 py-2.5 bg-blue-800 text-white font-semibold rounded-xl hover:bg-blue-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             + Novo Teste
           </button>
         </div>
 
-        {user && <CreditDisplay total={user.totalCredits} used={user.usedCredits} />}
+        <CreditDisplay total={totalCredits} used={usedCredits} />
 
         <div>
           <h2 className="text-lg font-semibold text-gray-800 mb-3">Histórico de Testes</h2>
-          {user && <TestHistory tests={[...user.tests].reverse()} />}
+          <TestHistory tests={tests} />
         </div>
       </main>
     </div>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import DropdownSelect from '@/components/DropdownSelect';
 import { Criteria } from '@/lib/types';
+import { addLocalTest, getLocalTests, getTotalCredits } from '@/lib/localStore';
 
 export default function TestSetupPage() {
   const [criteria, setCriteria] = useState<Criteria[]>([]);
@@ -29,16 +30,34 @@ export default function TestSetupPage() {
   async function handleStart() {
     const userId = localStorage.getItem('miia_userId');
     if (!userId) { router.push('/'); return; }
+
+    // Check credits client-side
+    const used = getLocalTests().length;
+    const total = getTotalCredits();
+    if (used >= total) { alert('Sem créditos disponíveis'); return; }
+
     setLoading(true);
     try {
       const res = await fetch('/api/test/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, criteria: selectedCriteriaObj?.name, year: selectedYear }),
+        body: JSON.stringify({ userId }),
       });
       const data = await res.json();
-      if (data.success) router.push(`/test/${data.testId}`);
-      else alert(data.error || 'Erro ao iniciar teste');
+      if (data.success) {
+        const criteriaName = selectedCriteriaObj?.name ?? '';
+        addLocalTest({
+          testId: data.testId,
+          criteria: criteriaName,
+          year: selectedYear,
+          status: 'in_progress',
+          startedAt: new Date().toISOString(),
+          feedbackSubmitted: false,
+        });
+        router.push(`/test/${data.testId}`);
+      } else {
+        alert(data.error || 'Erro ao iniciar teste');
+      }
     } finally {
       setLoading(false);
     }
