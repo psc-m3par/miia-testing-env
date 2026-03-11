@@ -3,86 +3,135 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Header from '@/components/Header';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import SubmissionPhase from '@/components/test/SubmissionPhase';
+import ProcessingPhase from '@/components/test/ProcessingPhase';
+import ResultPhase from '@/components/test/ResultPhase';
+
+type Phase = 1 | 2 | 3;
 
 export default function TestPage() {
-  const [text, setText] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [time, setTime] = useState(0);
   const router = useRouter();
   const params = useParams();
   const testId = params.testId as string;
 
+  const [phase, setPhase] = useState<Phase>(1);
+  const [criteriaName, setCriteriaName] = useState('');
+  const [year, setYear] = useState('');
+  const [testDate, setTestDate] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState('');
+
+  // Submission data persisted across phases
+  const [submissionMode, setSubmissionMode] = useState<'text' | 'image'>('image');
+  const [essayText, setEssayText] = useState('');
+  const [essayImageUrl, setEssayImageUrl] = useState<string | null>(null);
+
   useEffect(() => {
-    const interval = setInterval(() => setTime(t => t + 1), 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const minutes = Math.floor(time / 60).toString().padStart(2, '0');
-  const seconds = (time % 60).toString().padStart(2, '0');
-
-  async function handleComplete() {
     const userId = localStorage.getItem('miia_userId');
+    const name = localStorage.getItem('miia_userName') ?? '';
+    setUserName(name);
+
     if (!userId) { router.push('/'); return; }
-    setLoading(true);
-    try {
-      await fetch('/api/test/complete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ testId, userId }),
-      });
-      router.push(`/test/${testId}/feedback`);
-    } finally {
-      setLoading(false);
-    }
+
+    fetch(`/api/test/${testId}?userId=${userId}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.testId) {
+          setCriteriaName(data.criteria ?? '');
+          setYear(data.year ?? '');
+          setTestDate(data.startedAt ?? new Date().toISOString());
+        } else {
+          router.push('/dashboard');
+        }
+      })
+      .catch(() => router.push('/dashboard'))
+      .finally(() => setLoading(false));
+  }, [testId, router]);
+
+  function handleSubmit(mode: 'text' | 'image', text: string, imageUrl: string | null) {
+    setSubmissionMode(mode);
+    setEssayText(text);
+    setEssayImageUrl(imageUrl);
+    setPhase(2);
   }
 
-  const userName = typeof window !== 'undefined' ? localStorage.getItem('miia_userName') || '' : '';
+  function handleProcessingComplete() {
+    setPhase(3);
+  }
+
+  function handleComplete() {
+    router.push(`/test/${testId}/feedback`);
+  }
+
+  function handleBackToDashboard() {
+    router.push('/dashboard');
+  }
+
+  if (loading) {
+    return (
+      <>
+        <Header userName={userName} subtitle="Teste em andamento" />
+        <LoadingSpinner />
+      </>
+    );
+  }
+
+  // Phase 2: full-screen processing, no header needed
+  if (phase === 2) {
+    return <ProcessingPhase onComplete={handleProcessingComplete} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header userName={userName} subtitle="Teste em andamento" />
-      <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gray-900">Área de Teste de Correção de Redação</h1>
-          <div className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-xl">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="font-mono text-gray-700 text-sm">{minutes}:{seconds}</span>
-          </div>
-        </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-            <p className="text-sm text-blue-800 font-medium">
-              📝 Área de teste — cole ou digite sua redação abaixo para correção
-            </p>
-            <p className="text-xs text-blue-600 mt-1">
-              Esta é uma versão de demonstração. A análise completa estará disponível em breve.
-            </p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Sua redação</label>
-            <textarea
-              value={text}
-              onChange={e => setText(e.target.value)}
-              placeholder="Digite ou cole sua redação aqui..."
-              rows={14}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-            <p className="text-xs text-gray-400 mt-1 text-right">{text.split(/\s+/).filter(Boolean).length} palavras</p>
-          </div>
-        </div>
-
-        <div className="flex justify-end">
+      {phase === 1 && (
+        <main className="max-w-3xl mx-auto px-4 py-8">
+          {/* Back button */}
           <button
-            onClick={handleComplete}
-            disabled={loading}
-            className="px-8 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 disabled:opacity-50 transition-colors"
+            onClick={() => router.push('/dashboard')}
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-5"
           >
-            {loading ? 'Concluindo...' : 'Concluir Teste →'}
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Voltar ao Dashboard
           </button>
-        </div>
-      </main>
+          <SubmissionPhase
+            criteriaName={criteriaName}
+            year={year}
+            onSubmit={handleSubmit}
+            onCancel={() => router.push('/dashboard')}
+          />
+        </main>
+      )}
+
+      {phase === 3 && (
+        <main className="max-w-6xl mx-auto px-4 py-8">
+          {/* Back button */}
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-5"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Voltar
+          </button>
+          <ResultPhase
+            criteriaName={criteriaName}
+            year={year}
+            testId={testId}
+            testDate={testDate}
+            mode={submissionMode}
+            essayText={essayText}
+            essayImageUrl={essayImageUrl}
+            onComplete={handleComplete}
+            onBackToDashboard={handleBackToDashboard}
+          />
+        </main>
+      )}
     </div>
   );
 }

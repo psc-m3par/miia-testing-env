@@ -1,0 +1,89 @@
+{
+  "themes": [
+    {
+      "criteria": "ENEM",
+      "year": "2024",
+      "theme": "Desafios para a valorização da herança africana no Brasil",
+      "motivatingTexts": [
+        {
+          "label": "Texto I",
+          "content": "A história da África é rica em diversidade cultural e contribuições significativas para o patrimônio global da humanidade. Desde a antiguidade, civilizações africanas desenvolveram sistemas complexos de organização social, arte, ciência e filosofia que influenciaram profundamente outras culturas ao redor do mundo.",
+          "source": "Adaptado de: KI-ZERBO, J. História Geral da África. UNESCO, 2010."
+        },
+        {
+          "label": "Texto II",
+          "content": "O Brasil é o país com a maior população de descendentes de africanos fora da África. A herança africana está presente na língua, na culinária, na música, na religião e em diversos outros aspectos da cultura brasileira. No entanto, essa contribuição nem sempre é devidamente reconhecida e valorizada pela sociedade.",
+          "source": "Disponível em: www.palmares.gov.br. Acesso em: 15 mar. 2024."
+        }
+      ]
+    },
+    {
+      "criteria": "ENEM",
+      "year": "2023",
+      "theme": "Democratização do acesso ao cinema no Brasil",
+      "motivatingTexts": [
+        {
+          "label": "Texto I",
+          "content": "No dia da primeira exibição pública de cinema — 28 de dezembro de 1895, em Paris —, um homem de teatro que trabalhava com mágicas, Georges Méliès, foi falar com Lumière, um dos inventores do cinema; queria adquirir um aparelho, e Lumière desencorajou-o, disse-lhe que o 'Cinematógrafo' não tinha o menor futuro como espetáculo, era um instrumento científico para reproduzir o movimento e só poderia servir para pesquisas.",
+          "source": "BERNARDET, Jean-Claude. O que é Cinema. São Paulo: Brasiliense, 1993."
+        },
+        {
+          "label": "Texto II",
+          "content": "Edgar Morin define o cinema como uma máquina que registra a existência e a restitui como tal, porém levando em consideração o indivíduo, ou seja, o cinema seria um meio de transpor para a tela o universo pessoal, solicitando a participação do espectador.",
+          "source": "GUTFREIND, C. F. O filme e a representação do real. E-Compós, v. 6, 11, 2006 (adaptado)."
+        },
+        {
+          "label": "Texto III",
+          "content": "Disponível em: www.meioemensagem.com. Acesso em: 12 jun. 2019 (adaptado).",
+          "source": ""
+        },
+        {
+          "label": "Texto IV",
+          "content": "O Brasil já teve um parque exibidor vigoroso e descentralizado: quase 3.300 salas em 1975, uma para cada 30.000 habitantes, 80% em cidades do interior. Desde então, o país mudou. Quase 120 milhões de pessoas a mais passaram a viver nas cidades. A urbanização acelerada, a falta de investimentos em infraestrutura urbana, a baixa capitalização das empresas exibidoras, as mudanças tecnológicas, entre outros fatores, alteraram a geografia do cinema.",
+          "source": "Disponível em: https://cinemapertodevoce.ancine.gov.br. Acesso em: 13 jun. 2019 (fragmento)."
+        }
+      ]
+    },
+    {
+      "criteria": "ENEM",
+      "year": "2022",
+      "theme": "Desafios para a valorização de comunidades e povos tradicionais no Brasil",
+      "motivatingTexts": [
+        {
+          "label": "Texto I",
+          "content": "Povos e comunidades tradicionais são grupos culturalmente diferenciados que se reconhecem como tais e possuem formas próprias de organização social. Ocupam e usam territórios e recursos naturais como condição para sua reprodução cultural, social, religiosa, ancestral e econômica.",
+          "source": "Decreto n.º 6.040, de 7 de fevereiro de 2007 (adaptado)."
+        },
+        {
+          "label": "Texto II",
+          "content": "As comunidades tradicionais brasileiras enfrentam desafios históricos relacionados ao reconhecimento territorial, à preservação cultural e ao acesso a políticas públicas. A invisibilidade social desses grupos perpetua ciclos de exclusão e vulnerabilidade.",
+          "source": "Adaptado de: Relatório sobre Comunidades Tradicionais. IPEA, 2021."
+        }
+      ]
+    },
+    {
+      "criteria": "ENEM",
+      "year": "2021",
+      "theme": "Invisibilidade e registro civil: garantia de acesso à cidadania no Brasil",
+      "motivatingTexts": [
+        {
+          "label": "Texto I",
+          "content": "O registro civil de nascimento é o ato que oficializa a existência de uma pessoa perante o Estado e a sociedade. Sem esse documento, o indivíduo encontra-se em situação de invisibilidade jurídica, sem acesso a direitos fundamentais como saúde, educação e trabalho formal.",
+          "source": "Adaptado de: Certidão de nascimento: o primeiro passo para a cidadania. CNJ, 2020."
+        }
+      ]
+    },
+    {
+      "criteria": "ENEM",
+      "year": "2020",
+      "theme": "O estigma associado às doenças mentais na sociedade brasileira",
+      "motivatingTexts": [
+        {
+          "label": "Texto I",
+          "content": "A saúde mental tem sido historicamente negligenciada nas políticas públicas brasileiras. O estigma associado aos transtornos mentais cria barreiras significativas para o acesso ao tratamento e a reintegração social dos indivíduos afetados.",
+          "source": "Adaptado de: OMS. Relatório Mundial de Saúde Mental, 2022."
+        }
+      ]
+    }
+  ]
+}
