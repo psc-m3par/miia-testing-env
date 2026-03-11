@@ -19,7 +19,7 @@ export default function FeedbackPage() {
     if (!userId) { router.push('/'); return; }
     setLoading(true);
     try {
-      updateLocalTest(testId, { feedbackSubmitted: true });
+      updateLocalTest(testId, { feedbackSubmitted: true, feedbackText: textFeedback });
       // Send to API (best-effort, won't persist on serverless but logs the intent)
       await fetch('/api/feedback', {
         method: 'POST',

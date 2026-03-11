@@ -6,6 +6,7 @@ export interface TestRecord {
   startedAt: string;
   completedAt?: string;
   feedbackSubmitted: boolean;
+  feedbackText?: string;
 }
 
 export interface User {
